@@ -133,7 +133,7 @@
           <a-entity light="type: ambient; intensity: 1.0"></a-entity>
 
           <!-- Doppelter Himmel für Crossfade -->
-          <a-sky id="sky-current" src="#Mensa" opacity="1" material="transparent: true"></a-sky>
+          <a-sky id="sky-current" src="#Klassenraum" opacity="1" material="transparent: true"></a-sky>
           <a-sky id="sky-next" src="#placeholder" opacity="0" visible="false" material="transparent: true"></a-sky>
 
           <a-assets timeout="30000">
@@ -260,9 +260,46 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
                             class="close-button"
                             text="value: Schließen; align: center; color: #fff"></a-entity>
               </a-entity>
-
-
           </a-entity>
+
+          <!-- Panel / UI für „Klassenraum“ – nur in „Klassenraum“-Szene sichtbar -->
+          <a-entity id="klassenraum-panel-entity" visible="false" position="0 1.2 -2.0" rotation="0 0 0">
+            <!-- Dezent: schwarzer Hintergrundrahmen hinter der Box (optional) -->
+            <!-- <a-plane width="3.7" height="2.1" color="#000" opacity="0.18" position="0 0.6 -0.01"></a-plane> -->
+
+            <!-- Info-Icon: gut sichtbar links unten vor dir -->
+            <a-entity id="info-icon-klassenraum"
+                      position="-0.9 -0.1 0"
+                      geometry="primitive: plane; width: 0.6; height: 0.6"
+                      material="src: img/Infobutton.png; transparent: true"
+                      class="clickable"
+                      info-trigger></a-entity>
+
+            <!-- Infobox (fixe Position, unabhängig vom Icon), mittig vor dir -->
+            <a-entity id="info-box"
+                      visible="false"
+                      position="0 0.6 0"
+                      rotation="0 0 0">
+              <a-plane width="3.6" height="2.0" color="#fff" opacity="0.95"></a-plane>
+
+              <a-text value="Informationen zum Klassenraum"
+                      color="#000" position="0 0.45 0.01" width="3.2" align="center"></a-text>
+
+              <a-text value="Flexible Sitzordnung, digitale Tafel und Platz für Gruppenarbeit."
+                      color="#000" position="0 -0.05 0.01" width="3.2" align="center"></a-text>
+
+              <a-entity
+                geometry="primitive: plane; width: 0.5; height: 0.5"
+                material="color: #ff0000"
+                position="1.7 0.85 0.01"
+                class="close-button"
+                text="value: X; align: center; color: #fff; width: 2.2">
+              </a-entity>
+
+            </a-entity>
+          </a-entity>
+
+
 
           <!-- Videokachel (VR-fähig) – nur in „Hof“ sichtbar -->
           <a-entity id="hof-video-entity" visible="false" position="2.5 1.5 4.0" rotation="0 -155 0">
@@ -298,28 +335,28 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
       </a-scene>
 
       <script>
-          /* Informationsbox-Komponente */
           AFRAME.registerComponent('info-trigger', {
-          init: function () {
-            const group = this.el.closest('#mensa-video-entity') || this.el.sceneEl;
-            const infoBox = group.querySelector('#info-box');
-            if (!infoBox) return;
+            init: function () {
+              // Nächstgelegene Container-Entity als Gruppe verwenden
+              const group = this.el.parentEl || this.el.sceneEl;
+              const infoBox = group.querySelector('#info-box');
+              if (!infoBox) return;
 
-            const closeButton = infoBox.querySelector('.close-button');
+              const closeButton = infoBox.querySelector('.close-button');
 
-            // Beim Klick nur Sichtbarkeit schalten – Position bleibt, wie im Markup gesetzt
-            this.el.addEventListener('click', () => {
-              infoBox.setAttribute('visible', true);
-            });
-
-            if (closeButton) {
-              closeButton.classList.add('clickable');
-              closeButton.addEventListener('click', () => {
-                infoBox.setAttribute('visible', false);
+              // Beim Klick nur Sichtbarkeit schalten – Position bleibt, wie im Markup gesetzt
+              this.el.addEventListener('click', () => {
+                infoBox.setAttribute('visible', true);
               });
+
+              if (closeButton) {
+                closeButton.classList.add('clickable');
+                closeButton.addEventListener('click', () => {
+                  infoBox.setAttribute('visible', false);
+                });
+              }
             }
-          }
-        });
+          });
 
           /* Video-Controls: funktioniert für Mensa und Hof gleich.
           Unmute nur, wenn das eigene Panel sichtbar ist. */
@@ -465,10 +502,12 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
           const hofEntity   = document.getElementById('hof-video-entity');
           const hofVideo    = document.getElementById('HofVideo');
           const hofPlane    = document.getElementById('hof-video-plane');
+          const klassenPanel = document.getElementById('klassenraum-panel-entity'); // NEU
 
           // Panels zunächst unsichtbar
           if (mensaEntity) mensaEntity.setAttribute('visible', false);
           if (hofEntity)   hofEntity.setAttribute('visible', false);
+          if (klassenPanel) klassenPanel.setAttribute('visible', false);
 
           // Video-Helper
           const setInactive = (videoEl, planeEl) => {
@@ -539,6 +578,8 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
           // Sichtbarkeit der Videopanels entsprechend Zielszene
           if (mensaEntity) mensaEntity.setAttribute('visible', targetId === 'Mensa');
           if (hofEntity)   hofEntity.setAttribute('visible',   targetId === 'Hof');
+          if (klassenPanel) klassenPanel.setAttribute('visible', targetId === 'Klassenraum');
+
 
           // Hinweise aktualisieren
           if (mensaPlane && mensaPlane.components['video-controls']) mensaPlane.components['video-controls'].updateHint();
@@ -622,33 +663,36 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
 
           // Warten bis die Szene fertig ist
           sceneEl.addEventListener('loaded', () => {
-          // Prüfen, welche Startszene gesetzt ist
-          const startSrc = (skyCurrent && skyCurrent.getAttribute('src')) || '';
-          // Falls Startszene Mensa ist (#Mensa)
-          if (String(startSrc).includes('#Mensa')) {
-          // Sichtbarkeit wie beim Szenenwechsel setzen
-          if (mensaEntity) mensaEntity.setAttribute('visible', true);
-          if (hofEntity)   hofEntity.setAttribute('visible', false);
+            const startSrc = (skyCurrent && skyCurrent.getAttribute('src')) || '';
 
-          // Video-Status wie im tour-link: nur Zielszene autoplay (muted)
-          setInactive(mensaVideo, mensaPlane);
-          setInactive(hofVideo, hofPlane);
+            // Referenzen für optionale Panels
+            const klassenPanel = document.getElementById('klassenraum-panel-entity');
 
-          // Hints aktualisieren (falls Komponenten schon gemountet)
-          if (mensaPlane && mensaPlane.components['video-controls']) {
-          mensaPlane.components['video-controls'].updateHint();
-          }
+            // Alles standardmäßig aus
+            if (mensaEntity) mensaEntity.setAttribute('visible', false);
+            const hofEntityRef = hofEntity; // nur Lesbarkeit
+            if (hofEntityRef) hofEntityRef.setAttribute('visible', false);
+            if (klassenPanel) klassenPanel.setAttribute('visible', false);
 
-          // currentId merken, damit der erste spätere Klick korrekt arbeitet
-          sceneEl.dataset.currentId = 'Mensa';
-          } else {
-          // Start ist nicht Mensa → alles wie gewohnt: Panels aus
-          if (mensaEntity) mensaEntity.setAttribute('visible', false);
-          if (hofEntity)   hofEntity.setAttribute('visible', false);
-          setInactive(mensaVideo, mensaPlane);
-          setInactive(hofVideo, hofPlane);
-          sceneEl.dataset.currentId = 'Werkstatt';
-          }
+            if (String(startSrc).includes('#Mensa')) {
+              if (mensaEntity) mensaEntity.setAttribute('visible', true);
+              // Video-Status wie im tour-link: NICHT starten (dein Wunsch)
+              setInactive(mensaVideo, mensaPlane);
+              setInactive(hofVideo, hofPlane);
+              if (mensaPlane && mensaPlane.components['video-controls']) {
+                mensaPlane.components['video-controls'].updateHint();
+              }
+              sceneEl.dataset.currentId = 'Mensa';
+            } else if (String(startSrc).includes('#Klassenraum')) {
+              // Start in Klassenraum → Panel sichtbar
+              if (klassenPanel) klassenPanel.setAttribute('visible', true);
+              sceneEl.dataset.currentId = 'Klassenraum';
+            } else {
+              // Andere Startszene (z. B. Werkstatt)
+              setInactive(mensaVideo, mensaPlane);
+              setInactive(hofVideo, hofPlane);
+              sceneEl.dataset.currentId = 'Werkstatt';
+            }
           });
           });
       </script>
