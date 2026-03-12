@@ -134,6 +134,17 @@
                 opacity: 0;
                 pointer-events: none;
             }
+
+            a-scene { touch-action: none; }
+            .loading-bar {
+              position: absolute; bottom: 20px; left: 20px;
+              width: 120px; height: 18px; background: rgba(0,0,0,0.6);
+              border-radius: 9px; padding: 2px; z-index: 9999; opacity: 0; transition: opacity 0.3s;
+            }
+            #progress {
+              height: 100%; width: 0%; background: white;
+              border-radius: 7px; transition: width 0.2s;
+            }
     </style>
 
 </head>
@@ -149,19 +160,6 @@
             <button id="start-btn" class="start-btn" type="button">Tour starten</button>
         </div>
     </div> -->
-      a-scene { touch-action: none; }
-      .loading-bar {
-        position: absolute; bottom: 20px; left: 20px;
-        width: 120px; height: 18px; background: rgba(0,0,0,0.6);
-        border-radius: 9px; padding: 2px; z-index: 9999; opacity: 0; transition: opacity 0.3s;
-      }
-      #progress {
-        height: 100%; width: 0%; background: white;
-        border-radius: 7px; transition: width 0.2s;
-      }
-    </style>
-  </head>
-  <body>
 
     <!-- Ladebalken -->
     <div class="loading-bar"><div id="progress"></div></div>
@@ -273,7 +271,7 @@
 
             <!-- Hinweistext, wenn stumm -->
             <a-text id="unmute-hint"
-                 
+
                     value="Bitte blinzeln um den Ton zu aktivieren."
                     align="center"
                     width="2"
@@ -289,10 +287,8 @@
             <!-- Informationsbox (fixe Position, unabhängig vom Icon) -->
             <a-entity id="info-box" visible="false" position="-5.5 0.8 1.5" rotation="0 58 0">
                 <a-plane width="3.3" height="1.9" color="#fff" opacity="0.9"></a-plane>
-                <a-text id="info-text-1" font="#Roboto-msdf" material="shader: msdf" value="" color="#000" position="0 0 0.01" width="2.4" align="center"></a-text>
-                <a-text value="Hier ist unsere Küche – mehr als nur ein Ort zum Essenholen.
-                        Sie ist Treffpunkt, Wohlf&uuml;hlort und manchmal auch kleine Rettungsstation im Alltag.
-                        Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;hlpack, einer Tasse Tee oder einfach einem offenen Ohr und einem guten Gespr&auml;ch." color="#000" position="0 -0.5 0.01" width="2.4" align="center"></a-text>
+                <a-text value="Hier ist unsere Kueche – mehr als nur ein Ort zum Essenholen. Sie ist Treffpunkt, Wohlfuehlort und manchmal auch kleine Rettungsstation im Alltag.
+                        Tamara und Nikos sind immer fuer uns da – ob mit leckerem Essen, einem Kuehlpack, einer Tasse Tee oder einfach einem offenen Ohr und einem guten Gespraech." color="#000" position="0 -0.15 0.01" width="2.4" align="center"></a-text>
                 <a-entity geometry="primitive: plane; width: 0.5; height: 0.5"
                           material="color: #ff0000"
                           position="1.385 0.685 0.01"
@@ -318,7 +314,7 @@
 
             <!-- Hinweistext, wenn stumm -->
             <a-text id="hof-unmute-hint"
-          
+
                     value="Bitte blinzeln, um den Ton zu aktivieren."
                     align="center"
                     width="1.6"
