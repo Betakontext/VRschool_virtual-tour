@@ -121,7 +121,7 @@
         <div class="start-content" role="dialog" aria-labelledby="start-title" aria-describedby="start-desc">
             <h2 id="start-title" class="start-title">Herzlich willkommen zu unserer virtuellen Tour</h2>
             <p id="start-desc" class="start-text">
-                Entdecke unsere Räume in 360°. Tippe oder klicke auf „Tour starten“, um zu beginnen.
+                Entdecke unsere Räume in 360°. Tippe oder klicke auf „Tour starten", um zu beginnen.
             </p>
             <button id="start-btn" class="start-btn" type="button">Tour starten</button>
         </div>
@@ -183,6 +183,11 @@
                      loop
                      muted>
               </video>
+
+              <!-- MSDF-Font mit Umlauten (Roboto)
+              <a-asset-item id="robotoFont" src="fonts/Roboto-msdf.json"></a-asset-item>
+              <img id="robotoFontImg" src="fonts/Roboto-msdf.png"> -->
+
           </a-assets>
 
           <!-- Template für klickbare Thumbs -->
@@ -217,7 +222,7 @@
           </a-entity>
 
 
-          <!-- Videokachel (VR-fähig) und Infobox – nur in „Mensa“ sichtbar -->
+          <!-- Videokachel (VR-fähig) und Infobox – nur in „Mensa" sichtbar -->
           <a-entity id="mensa-video-entity" visible="false" position="4 1.15 -2.0" rotation="0 -45 0">
               <!-- optionaler Rahmen -->
               <a-plane width="1.7" height="0.96" color="#000" position="0 0 -0.002" opacity="0.7"></a-plane>
@@ -249,59 +254,63 @@
               <a-entity id="info-box" visible="false" position="-5.5 0.8 1.5" rotation="0 58 0">
                   <a-plane width="3.3" height="1.9" color="#fff" opacity="0.9"></a-plane>
                   <a-text value="Hier ist unsere Küche – mehr als nur ein Ort zum Essenholen.
-Sie ist Treffpunkt, Wohlf&uuml;hlort und manchmal auch kleine Rettungsstation im Alltag.
+Sie ist Treffpunkt, Wohlfühlort und manchmal auch kleine Rettungsstation im Alltag.
 
-Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;hlpack, einer Tasse Tee oder einfach einem offenen Ohr und einem guten Gespr&auml;ch.
-" color="#000" position="0 0 0.01" width="2.4" align="center"></a-text>
-                  <a-text value="Tippe auf das Objekt, um mehr zu erfahren." color="#000" position="0 -0.5 0.01" width="2.4" align="center"></a-text>
+Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem Kühlpack, einer Tasse Tee oder einfach einem offenen Ohr und einem guten Gespräch.
+" color="#000" position="0 0 0.01" width="2.4" align="center" text="font: #robotoFont; fontImage: #robotoFontImg"></a-text>
+                  <a-text value="Tippe auf das Objekt, um mehr zu erfahren." color="#000" position="0 -0.5 0.01" width="2.4" align="center" text="font: #robotoFont; fontImage: #robotoFontImg"></a-text>
                   <a-entity geometry="primitive: plane; width: 0.5; height: 0.5"
                             material="color: #ff0000"
                             position="1 -0.5 0.01"
                             class="close-button"
-                            text="value: Schließen; align: center; color: #fff"></a-entity>
+                            text="value: Schließen; align: center; color: #fff; font: #robotoFont; fontImage: #robotoFontImg"></a-entity>
               </a-entity>
           </a-entity>
 
-          <!-- Panel / UI für „Klassenraum“ – nur in „Klassenraum“-Szene sichtbar -->
+          <!-- Panel / UI für „Klassenraum" – nur in „Klassenraum"-Szene sichtbar -->
           <a-entity id="klassenraum-panel-entity" visible="false" position="0 1.2 -2.0" rotation="0 0 0">
-            <!-- Dezent: schwarzer Hintergrundrahmen hinter der Box (optional) -->
-            <!-- <a-plane width="3.7" height="2.1" color="#000" opacity="0.18" position="0 0.6 -0.01"></a-plane> -->
+              <!-- Dezent: schwarzer Hintergrundrahmen hinter der Box (optional) -->
+              <!-- <a-plane width="3.7" height="2.1" color="#000" opacity="0.18" position="0 0.6 -0.01"></a-plane> -->
 
-            <!-- Info-Icon: gut sichtbar links unten vor dir -->
-            <a-entity id="info-icon-klassenraum"
-                      position="-0.9 -0.1 0"
-                      geometry="primitive: plane; width: 0.6; height: 0.6"
-                      material="src: img/Infobutton.png; transparent: true"
-                      class="clickable"
-                      info-trigger></a-entity>
+              <!-- Info-Icon: gut sichtbar links unten vor dir -->
+              <a-entity id="info-icon-klassenraum"
+                        position="-0.0 -0.3 0"
+                        geometry="primitive: plane; width: 0.6; height: 0.6"
+                        material="src: img/Infobutton.png; transparent: true"
+                        class="clickable"
+                        info-trigger></a-entity>
 
-            <!-- Infobox (fixe Position, unabhängig vom Icon), mittig vor dir -->
-            <a-entity id="info-box"
-                      visible="false"
-                      position="0 0.6 0"
-                      rotation="0 0 0">
-              <a-plane width="3.6" height="2.0" color="#fff" opacity="0.95"></a-plane>
+              <!-- Infobox (fixe Position, unabhängig vom Icon), mittig vor dir -->
+              <a-entity id="info-box"
+                        visible="false"
+                        position="0 0.6 -2"
+                        rotation="0 0 0">
+                <a-plane width="3.6" height="2.0" color="#fff" opacity="0.95"></a-plane>
 
-              <a-text value="Informationen zum Klassenraum"
-                      color="#000" position="0 0.45 0.01" width="3.2" align="center"></a-text>
+                <a-text value="Informationen zum Klassenraum"
+                        color="#000" position="0 0.45 0.01" width="3.2" align="center" text="font: #robotoFont; fontImage: #robotoFontImg"></a-text>
 
-              <a-text value="Flexible Sitzordnung, digitale Tafel und Platz für Gruppenarbeit."
-                      color="#000" position="0 -0.05 0.01" width="3.2" align="center"></a-text>
+                <a-text value="Hoefliches mit einander, denn Klassenraum ordentlich halten."
+                        color="#000" position="0 -0.05 0.01" width="3.2" align="center"></a-text>
 
-              <a-entity
-                geometry="primitive: plane; width: 0.5; height: 0.5"
-                material="color: #ff0000"
-                position="1.7 0.85 0.01"
-                class="close-button"
-                text="value: X; align: center; color: #fff; width: 2.2">
-              </a-entity>
+                <!-- RoboFont VErsion,... funktioniert noch nicht!
+                <a-text value="Höfliches mit einander, denn Klassenraum ordentlich halten."
+                        color="#000" position="0 -0.05 0.01" width="3.2" align="center" text="font: #robotoFont; fontImage: #robotoFontImg"></a-text> -->
+
+                <a-entity
+                  geometry="primitive: plane; width: 0.5; height: 0.5"
+                  material="color: #ff0000"
+                  position="1.50 0.70 0.01"
+                  class="close-button"
+                  text="value: X; align: center; color: #fff; width: 2.2; font: #robotoFont; fontImage: #robotoFontImg">
+                </a-entity>
 
             </a-entity>
           </a-entity>
 
 
 
-          <!-- Videokachel (VR-fähig) – nur in „Hof“ sichtbar -->
+          <!-- Videokachel (VR-fähig) – nur in „Hof" sichtbar -->
           <a-entity id="hof-video-entity" visible="false" position="2.5 1.5 4.0" rotation="0 -155 0">
               <!-- Rahmen passend zum Hochkantformat -->
               <a-plane width="0.94" height="1.78" color="#000" position="0 0 -0.002" opacity="0.7"></a-plane>
@@ -315,7 +324,7 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
                        video-controls="video: #HofVideo; hint: #hof-unmute-hint">
               </a-video>
 
-              <!-- Hinweistext, wenn stumm -->
+              <!-- Hinweistext, wenn stumm, Robofont-->
               <a-text id="hof-unmute-hint"
                       value="Bitte blinzeln, um den Ton zu aktivieren."
                       align="center"
@@ -324,6 +333,7 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
                       color="#fff"
                       visible="false">
               </a-text>
+
           </a-entity>
 
           <!-- Kamera + Cursor (Gaze-Click funktioniert auf der Videofläche) -->
@@ -699,3 +709,5 @@ Tamara und Nikos sind immer für uns da – ob mit leckerem Essen, einem K&uuml;
 
   </body>
 </html>
+
+
